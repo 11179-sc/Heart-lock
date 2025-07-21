@@ -9,17 +9,19 @@
     body {
       font-family: 'Patrick Hand', cursive;
       background-color: #fff;
-      margin: 0; padding: 40px;
+      margin: 0; 
+      padding: 40px;
       color: #333;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
+      justify-content: center;
     }
     #scratchBox {
       position: relative;
-      width: 300px;
-      height: 100px;
+      width: 400px;
+      height: 150px;
       background-color: #ffb6c1; /* baby pink */
       border-radius: 15px;
       box-shadow: 0 5px 15px rgba(255, 182, 193, 0.6);
@@ -30,10 +32,13 @@
       justify-content: center;
       align-items: center;
       font-weight: bold;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       color: #b3003b;
       letter-spacing: 1px;
       overflow: hidden;
+      text-align: center;
+      padding: 10px;
+      box-sizing: border-box;
     }
     #scratchCanvas {
       position: absolute;
@@ -56,7 +61,13 @@
       display: none;
       background: #fff0f5;
     }
-    audio {
+    #audioControls {
+      margin-top: 15px;
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+      color: #b3003b;
+      cursor: pointer;
+      user-select: none;
       display: none;
     }
   </style>
@@ -69,8 +80,9 @@
   </div>
 
   <div id="letterContainer"></div>
+  <div id="audioControls">▶️ Play Music</div>
 
-  <audio autoplay loop>
+  <audio id="bgAudio" loop>
     <source src="song.mp3" type="audio/mp3" />
     Your browser does not support the audio element.
   </audio>
@@ -80,6 +92,8 @@
     const canvas = document.getElementById('scratchCanvas');
     const ctx = canvas.getContext('2d');
     const letterContainer = document.getElementById('letterContainer');
+    const audio = document.getElementById('bgAudio');
+    const audioControls = document.getElementById('audioControls');
 
     // Resize canvas to scratch box size
     function resize() {
@@ -90,17 +104,19 @@
     window.addEventListener('resize', resize);
 
     // Fill canvas with baby pink color
-    ctx.fillStyle = '#ffb6c1';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Setup for scratch effect
-    ctx.globalCompositeOperation = 'destination-out';
+    function fillCanvas() {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = '#ffb6c1';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'destination-out';
+    }
+    fillCanvas();
 
     let isDrawing = false;
 
     function scratch(x, y) {
       ctx.beginPath();
-      ctx.arc(x, y, 20, 0, Math.PI * 2);
+      ctx.arc(x, y, 25, 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -144,21 +160,21 @@
         canvas.style.display = 'none';
         scratchBox.textContent = '';
         showLetter();
+        playAudio();
       }
     }
 
-    const letterText = `Hi my Shubhu,
+    const letterText = `Ciaooo love,
 
-ciaooo love, Im just finding different ways to say i love u so much hihi , i love doing things for you so this is a new way i found to spend my time when youre sleeping , your mean the world to me really, come home soon im waiting for you 
-You are everything to me.
+I'm just finding different ways to say I love u so much hihi, I love doing things for you so this is a new way I found to spend my time when you're sleeping.
 
-Forever yours,
-Me 🩵`;
+You mean the world to me really, come home soon I'm waiting for you.
+
+You are everything to me.`;
 
     function showLetter() {
       letterContainer.style.display = 'block';
       let i = 0;
-
       function type() {
         if (i < letterText.length) {
           letterContainer.textContent += letterText.charAt(i);
@@ -168,6 +184,24 @@ Me 🩵`;
       }
       type();
     }
+
+    // Audio autoplay fix: try to play, else show play button
+    function playAudio() {
+      audio.play().catch(() => {
+        audioControls.style.display = 'block';
+      });
+    }
+
+    audioControls.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        audioControls.textContent = '⏸ Pause Music';
+      } else {
+        audio.pause();
+        audioControls.textContent = '▶️ Play Music';
+      }
+    });
+
   </script>
 
 </body>
