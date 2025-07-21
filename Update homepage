@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Lock Website</title>
+</head>
+<body>
+    <h1>Welcome to the Heart Lock</h1>
+    <img src="heartlock.png" alt="Heart Lock Image">
+    <p>This is the homepage of your heart lock site.</p>
+</body>
+</html>
