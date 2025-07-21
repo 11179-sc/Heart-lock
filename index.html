@@ -1,11 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Heart Lock Website</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Heart Lock</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background-color: #ffe6e6;
+    }
+    #lock {
+      width: 150px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    #secretContent {
+      display: none;
+      font-size: 24px;
+      color: #b30000;
+      margin-top: 30px;
+    }
+    #errorMsg {
+      color: red;
+      margin-top: 10px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      width: 240px;
+      border: 2px solid #b30000;
+      border-radius: 8px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #b30000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    button:hover {
+      background-color: #800000;
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to the Heart Lock</h1>
-    <img src="heartlock.png" alt="Heart Lock Image">
-    <p>This is the homepage of your heart lock site.</p>
+
+  <img id="lock" src="heartlock.png" alt="Heart Lock" />
+
+  <br /><br />
+
+  <input type="text" id="dateInput" placeholder="Enter our anniversary (DD-MM-YYYY)" />
+  <button onclick="checkDate()">Unlock</button>
+
+  <p id="errorMsg"></p>
+
+  <div id="secretContent">
+    <h1>Happy Anniversary, My Love! 💖</h1>
+    <p>This is our little secret place. Forever us.</p>
+  </div>
+
+  <script>
+    // 🗓️ Replace this with your actual anniversary date!
+    const correctDate = "19-03-2025";
+
+    function checkDate() {
+      const input = document.getElementById('dateInput').value.trim();
+      const errorMsg = document.getElementById('errorMsg');
+
+      if (input === correctDate) {
+        document.getElementById('lock').style.display = 'none';
+        document.getElementById('dateInput').style.display = 'none';
+        document.querySelector('button').style.display = 'none';
+        errorMsg.textContent = '';
+        document.getElementById('secretContent').style.display = 'block';
+      } else {
+        errorMsg.textContent = 'Incorrect date! Try again, love.';
+      }
+    }
+  </script>
+
 </body>
 </html>
