@@ -50,111 +50,13 @@
       margin-top: 30px;
     }
     #audioControls {
-      margin-top: 20px;
+      margin-top: 15px;
       font-family: Arial, sans-serif;
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: #b3003b;
       cursor: pointer;
       user-select: none;
-      display: inline-block;
-      border: 2px solid #b3003b;
-      padding: 8px 20px;
-      border-radius: 25px;
-      transition: background-color 0.3s ease;
-    }
-    #audioControls:hover {
-      background-color: #b3003b;
-      color: #fff;
-    }
-  </style>
-</head>
-<body>
-
-  <button id="openButton">Open My Love Letter 💌</button>
-
-  <div id="letterContainer"></div>
-  <div id="audioControls">▶️ Play Music</div>
-
-  <audio id="bgAudio" loop>
-    <source src="song.mp3" type="audio/mp3" />
-    Your browser does not support the audio element.
-  </audio>
-
-  <script>
-    const openButton = document.getElementById('openButton');
-    const letterContainer = document.getElementById('letterContainer');
-    const audio = document.getElementById('bgAudio');
-    const audioControls = document.getElementById('audioControls');
-
-    const letterText = `Ciaooo love,
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>How Much You Mean to Me</title>
-  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      font-family: 'Patrick Hand', cursive;
-      background-color: #fff;
-      margin: 0; 
-      padding: 40px;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      justify-content: center;
-    }
-    #openButton {
-      background: #ffb6c1;
-      border: none;
-      border-radius: 15px;
-      padding: 20px 40px;
-      font-size: 1.8rem;
-      color: #b3003b;
-      font-weight: bold;
-      letter-spacing: 1px;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(255, 182, 193, 0.6);
-      transition: background-color 0.3s ease;
-      user-select: none;
-    }
-    #openButton:hover {
-      background-color: #ff90b1;
-    }
-    #letterContainer {
-      max-width: 600px;
-      font-size: 1.3rem;
-      line-height: 1.6;
-      color: #222;
-      min-height: 200px;
-      white-space: pre-wrap;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(255, 182, 193, 0.5);
       display: none;
-      background: #fff0f5;
-      margin-top: 30px;
-    }
-    #audioControls {
-      margin-top: 20px;
-      font-family: Arial, sans-serif;
-      font-size: 1.1rem;
-      color: #b3003b;
-      cursor: pointer;
-      user-select: none;
-      display: inline-block;
-      border: 2px solid #b3003b;
-      padding: 8px 20px;
-      border-radius: 25px;
-      transition: background-color 0.3s ease;
-    }
-    #audioControls:hover {
-      background-color: #b3003b;
-      color: #fff;
     }
   </style>
 </head>
@@ -178,15 +80,15 @@
 
     const letterText = `Ciaooo love,
 
-Okay before you even start reading okay the music and then read . II’ve been thinking of so many ways to show you how much I love you and you being a bit ahead in time gave me the perfect time to make this for you , Maybe I say it a hundred times, maybe I try to prove it 1000 times but I do fail many times  :( that day I kinda ruined it the animation thing but now you’re sleeping wohhoo baby I was wondering what do I do but my brain kinda works sometimes for you . 
+Okay before you even start reading I hope your phones volume is up for the music and then you can start to read . II’ve been thinking of so many ways to show you how much I love you and you being a bit ahead in time gave me the perfect time to make this for you , Maybe I say it a hundred times, maybe I try to prove it 1000 times but I do fail many times  :( that day I kinda ruined it the animation thing but now you’re sleeping wohhoo baby I was wondering what do I do but my brain kinda works sometimes for you . 
 You’re my calm when everything feels too much,you know how sometimes people don’t have anything to talk about but that won’t ever be a case in us we both yap so much and even if there are times when we feel quiet that’s literally my favourite kind of silence . Honestly today is special for me , I felt so many things for you last year yeah a really special day . I love doing things for you even silly things like this, when you're asleep and I miss you more than I can say. You are my home babbu.
 I don’t need a special day or an anniversary to remind me of how lucky I am so just the thought of you is enough.
 Please come home soon… I’m waiting for you. 
 You mean the absolute world to me. You are everything.
-I can’t help falling in love with you
-  
-  love you always 
-    seju ;
+I can’t help falling in love with you 
+ 
+Love you always,
+Seja 💌`;
 
     function typeLetter() {
       letterContainer.style.display = 'block';
@@ -201,56 +103,16 @@ I can’t help falling in love with you
       type();
     }
 
-    openButton.addEventListener('click', () => {
-      openButton.style.display = 'none';
-      typeLetter();
+    function playAudio() {
       audio.play().catch(() => {
-        // Autoplay might be blocked, user can use controls manually
+        audioControls.style.display = 'block';
       });
-    });
-
-    audioControls.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play();
-        audioControls.textContent = '⏸ Pause Music';
-      } else {
-        audio.pause();
-        audioControls.textContent = '▶️ Play Music';
-      }
-    });
-
-    // Optional: Update button text based on audio state in case user uses external controls
-    audio.addEventListener('play', () => {
-      audioControls.textContent = '⏸ Pause Music';
-    });
-    audio.addEventListener('pause', () => {
-      audioControls.textContent = '▶️ Play Music';
-    });
-  </script>
-
-</body>
-</html>
-`;
-
-    function typeLetter() {
-      letterContainer.style.display = 'block';
-      let i = 0;
-      function type() {
-        if (i < letterText.length) {
-          letterContainer.textContent += letterText.charAt(i);
-          i++;
-          setTimeout(type, 40);
-        }
-      }
-      type();
     }
 
     openButton.addEventListener('click', () => {
       openButton.style.display = 'none';
       typeLetter();
-      audio.play().catch(() => {
-        // Autoplay might be blocked, user can use controls manually
-      });
+      playAudio();
     });
 
     audioControls.addEventListener('click', () => {
@@ -261,14 +123,6 @@ I can’t help falling in love with you
         audio.pause();
         audioControls.textContent = '▶️ Play Music';
       }
-    });
-
-    // Optional: Update button text based on audio state in case user uses external controls
-    audio.addEventListener('play', () => {
-      audioControls.textContent = '⏸ Pause Music';
-    });
-    audio.addEventListener('pause', () => {
-      audioControls.textContent = '▶️ Play Music';
     });
   </script>
 
