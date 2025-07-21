@@ -63,23 +63,7 @@
       border-radius: 20px;
       z-index: 2;
     }
-    #sparkles {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 48px;
-      color: #ff3366;
-      opacity: 0;
-      pointer-events: none;
-      animation: sparkle 1.5s infinite;
-      z-index: 3;
-      user-select: none;
-    }
-    @keyframes sparkle {
-      0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
-      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); }
-    }
+    
     #loveLetter {
       margin-top: 30px;
       font-size: 22px;
@@ -109,18 +93,19 @@
     <!-- Removed the photo <img> here -->
 
     <div id="message">
-      You are my sunshine, my heart, my forever.<br />
+     my home, my heart, my forever.<br />
       I love you more than words can say.
-    </div>
-    <canvas id="scratchCanvas"></canvas>
-    <div id="sparkles">✨ I love you! ✨</div>
-  </div>
+  
 
   <div id="loveLetter"></div>
 
   <footer>With love, <br />— Your Sejaa </footer>
 
-  <audio id="bgMusic" src="fallinginlove.mp3" loop autoplay></audio>
+  <audio autoplay loop>
+  <source src="song.mp3" type="audio/mp3">
+  Your browser does not support the audio element.
+</audio>
+  
 
 <script>
   const canvas = document.getElementById('scratchCanvas');
@@ -187,17 +172,11 @@
 
     scratchedPixels += Math.PI * 25 * 25;
 
-    if (scratchedPixels > totalPixels * 0.4) {
-      revealSparklesAndLetter();
+    if (scratchedPixels > totalPixels * 0.4) 
     }
   }
 
-  let revealed = false;
-  function revealSparklesAndLetter() {
-    if (!revealed) {
-      revealed = true;
-      sparkles.style.opacity = 1;
-      loveLetterDiv.style.opacity = 1;
+
       startTypingLetter();
     }
   }
