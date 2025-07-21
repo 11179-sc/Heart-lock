@@ -18,35 +18,22 @@
       min-height: 100vh;
       justify-content: center;
     }
-    #scratchBox {
-      position: relative;
-      width: 400px;
-      height: 150px;
-      background-color: #ffb6c1; /* baby pink */
+    #openButton {
+      background: #ffb6c1;
+      border: none;
       border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(255, 182, 193, 0.6);
-      margin-bottom: 30px;
-      user-select: none;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
+      padding: 20px 40px;
       font-size: 1.8rem;
       color: #b3003b;
+      font-weight: bold;
       letter-spacing: 1px;
-      overflow: hidden;
-      text-align: center;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-    #scratchCanvas {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 15px;
       cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 182, 193, 0.6);
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    #openButton:hover {
+      background-color: #ff90b1;
     }
     #letterContainer {
       max-width: 600px;
@@ -60,6 +47,7 @@
       box-shadow: 0 0 15px rgba(255, 182, 193, 0.5);
       display: none;
       background: #fff0f5;
+      margin-top: 30px;
     }
     #audioControls {
       margin-top: 15px;
@@ -74,10 +62,7 @@
 </head>
 <body>
 
-  <div id="scratchBox">
-    Scratch to open
-    <canvas id="scratchCanvas"></canvas>
-  </div>
+  <button id="openButton">Open My Love Letter 💌</button>
 
   <div id="letterContainer"></div>
   <div id="audioControls">▶️ Play Music</div>
@@ -88,110 +73,44 @@
   </audio>
 
   <script>
-    const scratchBox = document.getElementById('scratchBox');
-    const canvas = document.getElementById('scratchCanvas');
-    const ctx = canvas.getContext('2d');
+    const openButton = document.getElementById('openButton');
     const letterContainer = document.getElementById('letterContainer');
     const audio = document.getElementById('bgAudio');
     const audioControls = document.getElementById('audioControls');
 
-    // Resize canvas to scratch box size
-    function resize() {
-      canvas.width = scratchBox.clientWidth;
-      canvas.height = scratchBox.clientHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    // Fill canvas with baby pink color
-    function fillCanvas() {
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = '#ffb6c1';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.globalCompositeOperation = 'destination-out';
-    }
-    fillCanvas();
-
-    let isDrawing = false;
-
-    function scratch(x, y) {
-      ctx.beginPath();
-      ctx.arc(x, y, 25, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    function getPointerPos(e) {
-      const rect = canvas.getBoundingClientRect();
-      return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-      };
-    }
-
-    canvas.addEventListener('pointerdown', e => {
-      isDrawing = true;
-      const pos = getPointerPos(e);
-      scratch(pos.x, pos.y);
-    });
-
-    canvas.addEventListener('pointermove', e => {
-      if (!isDrawing) return;
-      const pos = getPointerPos(e);
-      scratch(pos.x, pos.y);
-    });
-
-    canvas.addEventListener('pointerup', () => {
-      isDrawing = false;
-      checkScratchCompletion();
-    });
-
-    canvas.addEventListener('pointerleave', () => {
-      isDrawing = false;
-    });
-
-    function checkScratchCompletion() {
-      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      let clearedPixels = 0;
-      for (let i = 3; i < imgData.data.length; i += 4) {
-        if (imgData.data[i] === 0) clearedPixels++;
-      }
-      const totalPixels = canvas.width * canvas.height;
-      if (clearedPixels > totalPixels * 0.6) { // 60% scratched
-        canvas.style.display = 'none';
-        scratchBox.textContent = '';
-        showLetter();
-        playAudio();
-      }
-    }
-
-    const letterText = `Ciaooo love,
-
-I’ve been thinking of so many ways to show you how much I love you and you being a bit ahead in time gave me the perfect time to make this for you , Maybe I say it a hundred times, maybe I try to prove it 1000 times but I do fail many times  :( that day I kinda ruined it the animation thing but now you’re sleeping wohhoo baby I was wondering what do I do but my brain kinda works sometimes for you . 
+    const letterText = `ciao love ,
+    I’ve been thinking of so many ways to show you how much I love you and you being a bit ahead in time gave me the perfect time to make this for you , Maybe I say it a hundred times, maybe I try to prove it 1000 times but I do fail many times  :( that day I kinda ruined it the animation thing but now you’re sleeping wohhoo baby I was wondering what do I do but my brain kinda works sometimes for you . 
 You’re my calm when everything feels too much,you know how sometimes people don’t have anything to talk about but that won’t ever be a case in us we both yap so much and even if there are times when we feel quiet that’s literally my favourite kind of silence . Honestly today is special for me be wise I felt so many things for you last year yeah a really special day . I love doing things for you even silly things like this, when you're asleep and I miss you more than I can say. You are my home babbu.
 I don’t need a special day or an anniversary to remind me of how lucky I am so just the thought of you is enough.
 Please come home soon… I’m waiting for you. 
-You mean the absolute world to me. You are everything.
-Love you always, seja  ;
 
-    function showLetter() {
+Love you always,
+Seja 💌`;
+
+    function typeLetter() {
       letterContainer.style.display = 'block';
       let i = 0;
       function type() {
         if (i < letterText.length) {
           letterContainer.textContent += letterText.charAt(i);
           i++;
-          setTimeout(type, 50);
+          setTimeout(type, 40);
         }
       }
       type();
     }
 
-    // Audio autoplay fix: try to play, else show play button
     function playAudio() {
       audio.play().catch(() => {
         audioControls.style.display = 'block';
       });
     }
+
+    openButton.addEventListener('click', () => {
+      openButton.style.display = 'none';
+      typeLetter();
+      playAudio();
+    });
 
     audioControls.addEventListener('click', () => {
       if (audio.paused) {
@@ -202,7 +121,6 @@ Love you always, seja  ;
         audioControls.textContent = '▶️ Play Music';
       }
     });
-
   </script>
 
 </body>
