@@ -1,215 +1,159 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>How Much You Mean To Me SB 💖</title>
+  <title>How Much You Mean to Me</title>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
-    body {
-      background: #ffe4e1;
-      font-family: 'Comfortaa', cursive, sans-serif;
-      color: #b3003b;
-      text-align: center;
-      padding: 40px 20px;
-      min-height: 100vh;
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Patrick Hand', cursive;
+      background-color: #ffb6c1; /* baby pink background */
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+    #container {
+      position: relative;
+      width: 90vw;
+      max-width: 500px;
+      height: 80vh;
+      background: white;
+      color: black;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      padding: 30px;
+      text-align: center;
+      visibility: hidden; /* hidden initially, shown after scratch */
       user-select: none;
-      overflow-x: hidden;
     }
     h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #d60000;
     }
-    #scratchContainer {
-      position: relative;
-      width: 320px;
-      height: 220px;
-      margin: 0 auto 30px;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(179, 0, 59, 0.4);
-      overflow: hidden;
-      cursor: pointer;
-
-      /* Gradient background replacing the photo */
-      background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+    p {
+      font-size: 1.3rem;
+      line-height: 1.6;
+      margin-bottom: 15px;
     }
-    /* Removed #backgroundImage styles since no photo */
-
-    #message {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      color: white;
-      font-size: 22px;
-      line-height: 1.4;
-      padding: 20px;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      user-select: text;
-      z-index: 1;
-      font-weight: 600;
-      text-shadow: 0 0 5px #550029;
-    }
-    canvas {
+    #scratchCanvas {
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      touch-action: none;
+      background-color: #ffb6c1; /* baby pink scratch layer */
+      cursor: pointer;
       border-radius: 20px;
-      z-index: 2;
     }
-    
-    #loveLetter {
-      margin-top: 30px;
-      font-size: 22px;
-      color: #b3003b;
-      font-weight: 600;
-      font-family: 'Comfortaa', cursive, sans-serif;
-      max-width: 350px;
-      margin-left: auto;
-      margin-right: auto;
-      white-space: pre-wrap;
-      min-height: 120px;
-      opacity: 0;
-      transition: opacity 0.8s ease;
-    }
-    footer {
-      font-size: 14px;
-      margin-top: auto;
-      color: #80002c;
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <h1>Scratch to see how much you mean to me ❤️</h1>
+  <div id="container">
+    <h1>How Much You Mean to Me</h1>
+    <p>Hi my Shubhu,</p>
+    <p>
+      ciaooo love, Im just finding different ways to say i love u so much hihi , i love doing things for you so this is a new way i found to spend my time when youre sleeping , your mean the world to me really, come home soon im waiting for you 
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      You are everything to me.
+    </p>
+    <p>
+      Forever yours,<br />
+      seju 🩵
+    </p>
+  </div>
 
-  <div id="scratchContainer">
-    <!-- Removed the photo <img> here -->
-
-    <div id="message">
-     my home, my heart, my forever.<br />
-      I love you more than words can say.
-  
-
-  <div id="loveLetter"></div>
-
-  <footer>With love, <br />— Your Sejaa </footer>
+  <canvas id="scratchCanvas"></canvas>
 
   <audio autoplay loop>
-  <source src="song.mp3" type="audio/mp3">
-  Your browser does not support the audio element.
-</audio>
-  
+    <source src="song.mp3" type="audio/mp3" />
+    Your browser does not support the audio element.
+  </audio>
 
-<script>
-  const canvas = document.getElementById('scratchCanvas');
-  const ctx = canvas.getContext('2d');
-  const container = document.getElementById('scratchContainer');
-  const sparkles = document.getElementById('sparkles');
-  const loveLetterDiv = document.getElementById('loveLetter');
+  <script>
+    const canvas = document.getElementById('scratchCanvas');
+    const ctx = canvas.getContext('2d');
+    const container = document.getElementById('container');
 
-  let scratchedPixels = 0;
-  let totalPixels;
+    let isDrawing = false;
 
-  const loveLetterText = `ciaoo love,\n\nYou mean the world to me. I dont think i have ever missed someone so much like I miss you right now babbu . I’m sending you all my love through this little note, I dont like when you get mad at me :( Can’t wait to hold you again.\n\nForever and ever yours, Seja💖`;
+    function resize() {
+      canvas.width = container.offsetWidth;
+      canvas.height = container.offsetHeight;
+      canvas.style.top = container.offsetTop + 'px';
+      canvas.style.left = container.offsetLeft + 'px';
+      ctx.fillStyle = '#ffb6c1'; // baby pink fill
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    resize();
+    window.addEventListener('resize', resize);
 
-  let typingIndex = 0;
-  let typingInterval;
+    ctx.globalCompositeOperation = 'destination-out';
 
-  function resizeCanvas() {
-    canvas.width = container.offsetWidth;
-    canvas.height = container.offsetHeight;
-    fillCanvas();
-    totalPixels = canvas.width * canvas.height;
-  }
+    function scratch(x, y) {
+      ctx.beginPath();
+      ctx.arc(x, y, 30, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
-  function fillCanvas() {
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = '#b3003b';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-
-  let isDrawing = false;
-
-  function getPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    if (e.touches) {
+    function getMousePos(e) {
+      const rect = canvas.getBoundingClientRect();
       return {
-        x: e.touches[0].clientX - rect.left,
-        y: e.touches[0].clientY - rect.top
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
       };
     }
-    return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    };
-  }
 
-  function startDrawing(e) {
-    e.preventDefault();
-    isDrawing = true;
-    scratch(e);
-  }
+    canvas.addEventListener('pointerdown', (e) => {
+      isDrawing = true;
+      const pos = getMousePos(e);
+      scratch(pos.x, pos.y);
+    });
 
-  function stopDrawing(e) {
-    e.preventDefault();
-    isDrawing = false;
-  }
+    canvas.addEventListener('pointermove', (e) => {
+      if (!isDrawing) return;
+      const pos = getMousePos(e);
+      scratch(pos.x, pos.y);
+    });
 
-  function scratch(e) {
-    if (!isDrawing) return;
-    const pos = getPos(e);
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(pos.x, pos.y, 25, 0, 2 * Math.PI);
-    ctx.fill();
+    canvas.addEventListener('pointerup', () => {
+      isDrawing = false;
+      checkScratchCompletion();
+    });
 
-    scratchedPixels += Math.PI * 25 * 25;
+    canvas.addEventListener('pointerleave', () => {
+      isDrawing = false;
+    });
 
-    if (scratchedPixels > totalPixels * 0.4) 
-    }
-  }
-
-
-      startTypingLetter();
-    }
-  }
-
-  function startTypingLetter() {
-    typingIndex = 0;
-    loveLetterDiv.textContent = '';
-    typingInterval = setInterval(() => {
-      loveLetterDiv.textContent += loveLetterText.charAt(typingIndex);
-      typingIndex++;
-      if (typingIndex >= loveLetterText.length) {
-        clearInterval(typingInterval);
+    function checkScratchCompletion() {
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      let clearedPixels = 0;
+      for (let i = 3; i < imgData.data.length; i += 4) {
+        if (imgData.data[i] === 0) clearedPixels++;
       }
-    }, 50);
-  }
-
-  canvas.addEventListener('mousedown', startDrawing);
-  canvas.addEventListener('touchstart', startDrawing);
-
-  canvas.addEventListener('mouseup', stopDrawing);
-  canvas.addEventListener('touchend', stopDrawing);
-  canvas.addEventListener('touchcancel', stopDrawing);
-
-  canvas.addEventListener('mousemove', scratch);
-  canvas.addEventListener('touchmove', scratch);
-
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-
-  const bgMusic = document.getElementById('bgMusic');
-  bgMusic.volume = 0.3;
-
-</script>
-
+      const totalPixels = canvas.width * canvas.height;
+      if (clearedPixels > totalPixels * 0.4) {
+        canvas.style.display = 'none';
+        container.style.visibility = 'visible';
+      }
+    }
+  </script>
 </body>
 </html>
