@@ -6,54 +6,55 @@
   <title>How Much You Mean to Me</title>
   <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet" />
   <style>
-    body, html {
-      margin: 0; padding: 0; height: 100%;
+    body {
       font-family: 'Patrick Hand', cursive;
-      background-color: #ffb6c1; /* baby pink background */
-      overflow: hidden;
+      background-color: #fff;
+      margin: 0; padding: 40px;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    #scratchBox {
+      position: relative;
+      width: 300px;
+      height: 100px;
+      background-color: #ffb6c1; /* baby pink */
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(255, 182, 193, 0.6);
+      margin-bottom: 30px;
+      user-select: none;
+      cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: white;
-    }
-    #container {
-      position: relative;
-      width: 90vw;
-      max-width: 500px;
-      height: 80vh;
-      background: white;
-      color: black;
-      border-radius: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: #b3003b;
+      letter-spacing: 1px;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 30px;
-      text-align: center;
-      visibility: hidden; /* hidden initially, shown after scratch */
-      user-select: none;
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
-      color: #d60000;
-    }
-    p {
-      font-size: 1.3rem;
-      line-height: 1.6;
-      margin-bottom: 15px;
     }
     #scratchCanvas {
       position: absolute;
       top: 0; left: 0;
       width: 100%;
       height: 100%;
-      z-index: 10;
-      touch-action: none;
-      background-color: #ffb6c1; /* baby pink scratch layer */
+      border-radius: 15px;
       cursor: pointer;
-      border-radius: 20px;
+    }
+    #letterContainer {
+      max-width: 600px;
+      font-size: 1.3rem;
+      line-height: 1.6;
+      color: #222;
+      min-height: 200px;
+      white-space: pre-wrap;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(255, 182, 193, 0.5);
+      display: none;
+      background: #fff0f5;
     }
     audio {
       display: none;
@@ -62,25 +63,12 @@
 </head>
 <body>
 
-  <div id="container">
-    <h1>How Much You Mean to Me</h1>
-    <p>Hi my Shubhu,</p>
-    <p>
-      ciaooo love, Im just finding different ways to say i love u so much hihi , i love doing things for you so this is a new way i found to spend my time when youre sleeping , your mean the world to me really, come home soon im waiting for you 
-    </p>
-    <p>
-      
-    </p>
-    <p>
-      You are everything to me.
-    </p>
-    <p>
-      Forever yours,<br />
-      seju 🩵
-    </p>
+  <div id="scratchBox">
+    Scratch to open
+    <canvas id="scratchCanvas"></canvas>
   </div>
 
-  <canvas id="scratchCanvas"></canvas>
+  <div id="letterContainer"></div>
 
   <audio autoplay loop>
     <source src="song.mp3" type="audio/mp3" />
@@ -88,32 +76,35 @@
   </audio>
 
   <script>
+    const scratchBox = document.getElementById('scratchBox');
     const canvas = document.getElementById('scratchCanvas');
     const ctx = canvas.getContext('2d');
-    const container = document.getElementById('container');
+    const letterContainer = document.getElementById('letterContainer');
 
-    let isDrawing = false;
-
+    // Resize canvas to scratch box size
     function resize() {
-      canvas.width = container.offsetWidth;
-      canvas.height = container.offsetHeight;
-      canvas.style.top = container.offsetTop + 'px';
-      canvas.style.left = container.offsetLeft + 'px';
-      ctx.fillStyle = '#ffb6c1'; // baby pink fill
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      canvas.width = scratchBox.clientWidth;
+      canvas.height = scratchBox.clientHeight;
     }
     resize();
     window.addEventListener('resize', resize);
 
+    // Fill canvas with baby pink color
+    ctx.fillStyle = '#ffb6c1';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Setup for scratch effect
     ctx.globalCompositeOperation = 'destination-out';
+
+    let isDrawing = false;
 
     function scratch(x, y) {
       ctx.beginPath();
-      ctx.arc(x, y, 30, 0, Math.PI * 2);
+      ctx.arc(x, y, 20, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    function getMousePos(e) {
+    function getPointerPos(e) {
       const rect = canvas.getBoundingClientRect();
       return {
         x: e.clientX - rect.left,
@@ -121,15 +112,15 @@
       };
     }
 
-    canvas.addEventListener('pointerdown', (e) => {
+    canvas.addEventListener('pointerdown', e => {
       isDrawing = true;
-      const pos = getMousePos(e);
+      const pos = getPointerPos(e);
       scratch(pos.x, pos.y);
     });
 
-    canvas.addEventListener('pointermove', (e) => {
+    canvas.addEventListener('pointermove', e => {
       if (!isDrawing) return;
-      const pos = getMousePos(e);
+      const pos = getPointerPos(e);
       scratch(pos.x, pos.y);
     });
 
@@ -149,11 +140,35 @@
         if (imgData.data[i] === 0) clearedPixels++;
       }
       const totalPixels = canvas.width * canvas.height;
-      if (clearedPixels > totalPixels * 0.4) {
+      if (clearedPixels > totalPixels * 0.6) { // 60% scratched
         canvas.style.display = 'none';
-        container.style.visibility = 'visible';
+        scratchBox.textContent = '';
+        showLetter();
       }
     }
+
+    const letterText = `Hi my Shubhu,
+
+ciaooo love, Im just finding different ways to say i love u so much hihi , i love doing things for you so this is a new way i found to spend my time when youre sleeping , your mean the world to me really, come home soon im waiting for you 
+You are everything to me.
+
+Forever yours,
+Me 🩵`;
+
+    function showLetter() {
+      letterContainer.style.display = 'block';
+      let i = 0;
+
+      function type() {
+        if (i < letterText.length) {
+          letterContainer.textContent += letterText.charAt(i);
+          i++;
+          setTimeout(type, 50);
+        }
+      }
+      type();
+    }
   </script>
+
 </body>
 </html>
